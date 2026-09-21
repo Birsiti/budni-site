@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /client/
 
-Sitemap: https://app.budni.tg-studio.xyz/sitemap.xml
+Sitemap: https://budni-by.site/sitemap.xml
