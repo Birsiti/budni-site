@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- изменено 2026-09-21 13:10 -->
+<!-- изменено 2026-09-21 16:10 -->
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -8,78 +8,149 @@
 <meta name="description" content="Сколько вакансий в базе Будни_BY, по сферам и по областям Беларуси.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://budni-by.site/stats.html">
+
 <script>
-(function(){
-  var scheme = (matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', scheme);
+(function () {
+  var saved = null;
+  try { saved = localStorage.getItem('budni_site_theme'); } catch (e) {}
+  var theme = (saved === 'light' || saved === 'dark') ? saved
+    : (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  document.documentElement.setAttribute('data-theme', theme);
 })();
 </script>
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%232AABEE'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle' fill='white' font-family='sans-serif'%3E%D0%91%3C/text%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="theme.css?v=20260920a">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-  .wrap{ max-width:480px; margin:0 auto; }
-  .hero{ text-align:center; padding:20px 0 8px; }
-  .hero h1{ font-size:20px; font-weight:700; margin:0 0 4px; }
-  .hero p{ color:var(--ink-soft); font-size:13px; margin:0; line-height:1.5; }
+  :root{
+    --navy-950:#0d1012; --navy-900:#15191c; --navy-850:#1c2124; --navy-800:#1a1e22;
+    --navy-700:#2a2f35; --navy-600:#3a414a;
+    --blue-300:#8ad4f7; --blue-400:#5cc1f2; --blue-500:#2aabee; --blue-600:#1b8fcb;
+    --ink-50:#eef1f2; --ink-300:#a7afb5; --ink-500:#7b838a;
+    --on-accent:#0d1012;
+    --header-bg:rgba(13,16,18,.85); --border-hair:rgba(255,255,255,.06); --border-soft:rgba(255,255,255,.16);
+    --radius:14px; --maxw:640px; --ease:cubic-bezier(.16,.8,.28,1); --gutter:20px;
+  }
+  @media(min-width:640px){ :root{ --gutter:32px; } }
+
+  :root[data-theme="light"]{
+    --navy-950:#f4f6f8; --navy-900:#eef1f4; --navy-850:#e9edf1; --navy-800:#ffffff;
+    --navy-700:#e1e6eb; --navy-600:#c9d0d7;
+    --blue-300:#166f9e; --blue-400:#1b8fcb; --blue-500:#2aabee; --blue-600:#1b8fcb;
+    --ink-50:#171a1d; --ink-300:#5b6570; --ink-500:#838c94;
+    --header-bg:rgba(244,246,248,.85); --border-hair:rgba(13,16,18,.08); --border-soft:rgba(13,16,18,.14);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background:var(--navy-950); color:var(--ink-50);
+    font-family:'Inter',sans-serif; font-size:16px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    transition:background .3s var(--ease), color .3s var(--ease);
+  }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter); }
+  h1,h2{ font-family:'Chakra Petch',sans-serif; }
+
+  header{
+    position:sticky; top:0; z-index:100; background:var(--header-bg); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border-hair);
+  }
+  .nav{ display:flex; align-items:center; justify-content:space-between; height:64px; gap:12px; }
+  .brand{ display:flex; align-items:center; gap:9px; }
+  .brand-mark{ width:28px; height:28px; flex:none; border-radius:8px; background:var(--blue-500); display:flex; align-items:center; justify-content:center; font-family:'Chakra Petch',sans-serif; font-weight:700; color:var(--on-accent); font-size:14px; }
+  .brand-name{ font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:15px; }
+  .back{ font-size:13.5px; color:var(--ink-300); }
+  .back:hover{ color:var(--blue-300); }
+  .nav-right{ display:flex; align-items:center; gap:12px; }
+  .theme-toggle{
+    width:40px; height:40px; flex:none; display:flex; align-items:center; justify-content:center;
+    background:transparent; border:1px solid var(--border-soft); border-radius:10px;
+    font-size:16px; line-height:1; transition:border-color .25s var(--ease);
+  }
+  .theme-toggle:hover{ border-color:var(--blue-500); }
+  .theme-toggle .ic-moon{ display:none; }
+  :root[data-theme="light"] .theme-toggle .ic-sun{ display:none; }
+  :root[data-theme="light"] .theme-toggle .ic-moon{ display:block; }
+
+  .content{ padding:36px 0 56px; }
+  .hero{ text-align:center; padding:8px 0 28px; }
+  .hero h1{ font-size:24px; font-weight:700; margin:0 0 8px; }
+  .hero p{ color:var(--ink-300); font-size:14px; margin:0; line-height:1.5; }
 
   .total-tile{
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    padding:22px 16px; text-align:center; margin:16px 0;
+    background:var(--navy-800); border:1px solid var(--navy-700); border-radius:var(--radius);
+    padding:28px 20px; text-align:center; margin-bottom:16px;
   }
-  .total-value{ font-family:'JetBrains Mono',monospace; font-size:40px; font-weight:700; color:var(--accent); line-height:1; }
-  .total-label{ color:var(--ink-soft); font-size:13px; margin-top:8px; }
+  .total-value{ font-family:'JetBrains Mono',monospace; font-size:44px; font-weight:700; color:var(--blue-300); line-height:1; }
+  .total-label{ color:var(--ink-500); font-size:13px; margin-top:8px; }
 
   .section{
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    padding:14px 16px; margin-bottom:14px;
+    background:var(--navy-800); border:1px solid var(--navy-700); border-radius:var(--radius);
+    padding:18px 18px; margin-bottom:14px;
   }
-  .section h2{ font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.03em;
-    color:var(--ink-soft); margin:0 0 8px; }
+  .section h2{
+    font-size:12.5px; font-weight:600; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--blue-400); margin:0 0 10px; font-family:'JetBrains Mono',monospace;
+  }
 
-  .brow{ padding:9px 0; border-bottom:1px solid var(--line); }
+  .brow{ padding:9px 0; border-bottom:1px solid var(--navy-700); }
   .brow:last-child{ border-bottom:none; }
   .brow-top{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-size:14px; }
-  .brow-num{ font-family:'JetBrains Mono',monospace; color:var(--ink-soft); white-space:nowrap; flex:none; font-size:13px; }
-  .brow-dim .brow-top span:first-child{ color:var(--ink-faint); }
-  .bar{ height:4px; border-radius:2px; background:var(--surface-3); margin-top:7px; overflow:hidden; }
-  .bar i{ display:block; height:100%; background:var(--accent); border-radius:2px; }
+  .brow-num{ font-family:'JetBrains Mono',monospace; color:var(--ink-300); white-space:nowrap; flex:none; font-size:13px; }
+  .brow-dim .brow-top span:first-child{ color:var(--ink-500); }
+  .bar{ height:4px; border-radius:2px; background:var(--navy-700); margin-top:7px; overflow:hidden; }
+  .bar i{ display:block; height:100%; background:linear-gradient(90deg, var(--blue-400), var(--blue-500)); border-radius:2px; }
 
-  .skel{ height:16px; border-radius:6px; background:var(--surface-3); margin:9px 0;
-    animation:pulse 1.2s ease-in-out infinite; }
+  .skel{ height:16px; border-radius:6px; background:var(--navy-700); margin:9px 0; animation:pulse 1.2s ease-in-out infinite; }
   @keyframes pulse{ 0%,100%{ opacity:.5; } 50%{ opacity:1; } }
   @media (prefers-reduced-motion: reduce){ .skel{ animation:none; } }
 
-  .err{ text-align:center; padding:20px 12px; color:var(--ink-soft); font-size:14px; }
+  .err{ text-align:center; padding:20px 12px; color:var(--ink-300); font-size:14px; }
   .err button{
     margin-top:12px; min-height:44px; padding:0 20px; border-radius:999px; border:none;
-    background:var(--accent); color:#fff; font-family:'Chakra Petch',sans-serif; font-weight:600;
-    font-size:14px;
+    background:var(--blue-500); color:var(--on-accent); font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:14px;
   }
 
-  .cta{ display:flex; gap:10px; margin:18px 0 6px; }
+  .cta{ display:flex; gap:10px; margin:20px 0 6px; }
   .cta a{
     flex:1; min-height:48px; display:flex; align-items:center; justify-content:center; gap:8px;
-    border-radius:999px; text-decoration:none; font-family:'Chakra Petch',sans-serif; font-weight:600;
-    font-size:14px; border:1px solid var(--line);
+    border-radius:999px; font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:14px; border:1px solid transparent;
   }
-  .cta a.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
-  .cta a.ghost{ background:var(--surface); color:var(--ink); }
+  .cta a.primary{ background:linear-gradient(135deg, var(--blue-400), var(--blue-500) 55%, var(--blue-600)); color:var(--on-accent); }
+  .cta a.ghost{ background:transparent; border-color:var(--border-soft); color:var(--ink-50); }
 
-  .upd{ text-align:center; color:var(--ink-faint); font-size:11px; margin:14px 0 4px; }
+  .upd{ text-align:center; color:var(--ink-500); font-size:11px; margin:14px 0 4px; }
 </style>
 </head>
 <body>
-<div class="content wrap">
+
+<header>
+  <div class="wrap nav">
+    <div class="brand"><span class="brand-mark">Б</span><span class="brand-name">Будни_BY</span></div>
+    <div class="nav-right">
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+        <span class="ic-sun">☀️</span><span class="ic-moon">🌙</span>
+      </button>
+      <a class="back" href="index.html">← На главную</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap content">
 
   <div class="hero">
-    <h1>📊 Будни_BY — статистика</h1>
+    <h1>📊 Статистика базы</h1>
     <p>Вакансии и подработки в Беларуси, база обновляется каждый день</p>
   </div>
 
   <div id="view">
     <div class="total-tile">
-      <div class="skel" style="width:60%;height:40px;margin:0 auto;"></div>
+      <div class="skel" style="width:60%;height:44px;margin:0 auto;"></div>
     </div>
     <div class="section">
       <div class="skel"></div><div class="skel"></div><div class="skel"></div>
@@ -132,8 +203,13 @@ async function load() {
   }
 }
 
-initTelegram();
 load();
+
+document.getElementById('themeToggle').addEventListener('click', function () {
+  var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('budni_site_theme', next); } catch (e) {}
+});
 </script>
 </body>
 </html>
