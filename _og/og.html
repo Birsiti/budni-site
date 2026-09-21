@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!-- изменено 2026-09-21 16:40 -->
+<!-- Исходник для og-image.png (1200×630). Рендер: см. _og/README.txt. Папка _og не публикуется GitHub Pages. -->
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>og-image</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Inter:wght@500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1012; --panel:#15191c; --line:rgba(255,255,255,.10);
+    --blue:#2aabee; --blue-300:#8ad4f7; --ink:#eef1f2; --ink-2:#a7afb5; --ink-3:#7b838a;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ width:1200px; height:630px; background:var(--bg); overflow:hidden; }
+  body{ position:relative; font-family:'Inter',sans-serif; color:var(--ink); }
+
+  /* свечение акцента справа сверху + сетка-«чертёж» как в стиле студии */
+  .glow{ position:absolute; inset:0;
+    background:
+      radial-gradient(640px 420px at 88% 8%, rgba(42,171,238,.28), transparent 70%),
+      radial-gradient(520px 360px at 6% 104%, rgba(42,171,238,.12), transparent 70%); }
+  .grid{ position:absolute; inset:0; opacity:.5;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:60px 60px;
+    -webkit-mask-image:radial-gradient(ellipse 80% 90% at 75% 20%, #000 0%, transparent 75%);
+            mask-image:radial-gradient(ellipse 80% 90% at 75% 20%, #000 0%, transparent 75%); }
+
+  .frame{ position:absolute; inset:0; padding:56px 68px 52px; display:flex; flex-direction:column; }
+
+  .brand{ display:flex; align-items:center; gap:16px; }
+  .mark{ width:56px; height:56px; border-radius:15px; background:var(--blue); color:var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:34px; }
+  .name{ font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:32px; letter-spacing:.01em; }
+  .name b{ color:var(--blue-300); font-weight:700; }
+
+  .eyebrow{ margin-top:auto; font-family:'JetBrains Mono',monospace; font-weight:500; font-size:20px;
+    letter-spacing:.18em; text-transform:uppercase; color:var(--blue); display:flex; align-items:center; gap:14px; }
+  .eyebrow::before{ content:""; width:36px; height:2px; background:var(--blue); }
+
+  h1{ margin-top:20px; font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:76px;
+    line-height:1.02; letter-spacing:.005em; max-width:1070px; }
+  h1 em{ font-style:normal; color:var(--blue); }
+
+  .cities{ margin-top:34px; display:flex; gap:12px; flex-wrap:wrap; }
+  .chip{ font-family:'Inter',sans-serif; font-weight:600; font-size:22px; color:var(--ink);
+    padding:9px 20px; border-radius:999px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.04); }
+
+  .foot{ margin-top:38px; padding-top:22px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'JetBrains Mono',monospace; font-weight:500; font-size:22px; color:var(--ink-2); }
+  .foot .url{ color:var(--ink); font-weight:700; }
+  .foot .tg{ color:var(--blue-300); }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="grid"></div>
+  <div class="frame">
+    <div class="brand">
+      <div class="mark">Б</div>
+      <div class="name">Будни<b>_BY</b></div>
+    </div>
+
+    <div class="eyebrow">агрегатор вакансий</div>
+    <h1>Вакансии и подработка в <em>Беларуси</em></h1>
+
+    <div class="cities">
+      <span class="chip">Минск</span><span class="chip">Брест</span><span class="chip">Витебск</span>
+      <span class="chip">Гомель</span><span class="chip">Гродно</span><span class="chip">Могилёв</span>
+    </div>
+
+    <div class="foot">
+      <span class="url">budni-by.site</span>
+      <span class="tg">t.me/Budni_BY_Bot</span>
+    </div>
+  </div>
+</body>
+</html>
