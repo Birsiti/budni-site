@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- изменено 2026-09-21 17:10 -->
+<!-- изменено 2026-09-21 17:40 -->
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -180,15 +180,6 @@
   .brand-name{ font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:16px; line-height:1.1; }
   .brand-name span{ display:block; color:var(--blue-400); font-size:10.5px; font-family:'JetBrains Mono',monospace; letter-spacing:.12em; font-weight:400; margin-top:3px; }
   .nav-right{ display:flex; align-items:center; gap:10px; }
-  .theme-toggle{
-    width:44px; height:44px; flex:none; display:flex; align-items:center; justify-content:center;
-    background:transparent; border:1px solid var(--border-soft); border-radius:10px;
-    font-size:17px; line-height:1; transition:border-color .25s var(--ease), background .25s var(--ease);
-  }
-  .theme-toggle:hover{ border-color:var(--blue-500); }
-  .theme-toggle .ic-moon{ display:none; }
-  :root[data-theme="light"] .theme-toggle .ic-sun{ display:none; }
-  :root[data-theme="light"] .theme-toggle .ic-moon{ display:block; }
 
   /* ---------- hero ---------- */
   .hero{ position:relative; padding:128px 0 64px; overflow:hidden; }
@@ -354,9 +345,7 @@
       <span class="brand-name">Будни_BY<span>ВАКАНСИИ В БЕЛАРУСИ</span></span>
     </div>
     <div class="nav-right">
-      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
-        <span class="ic-sun">☀️</span><span class="ic-moon">🌙</span>
-      </button>
+      <div id="themeMenu" style="width:44px;height:44px"></div>
       <a class="btn btn-primary" href="https://t.me/Budni_BY_Bot" target="_blank" rel="noopener">Открыть бота</a>
     </div>
   </div>
@@ -572,6 +561,7 @@
   </div>
 </footer>
 
+<script src="theme.js?v=20260921a"></script>
 <script src="app.js?v=20260920a"></script>
 <script>
 function renderTopSectors(obj) {
@@ -611,12 +601,6 @@ function onScroll() { header.classList.toggle('is-scrolled', window.scrollY > 8)
 onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
 
-var themeToggle = document.getElementById('themeToggle');
-themeToggle.addEventListener('click', function () {
-  var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', next);
-  try { localStorage.setItem('budni_site_theme', next); } catch (e) {}
-});
 </script>
 </body>
 </html>

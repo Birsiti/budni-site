@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- изменено 2026-09-21 16:45 -->
+<!-- изменено 2026-09-21 17:40 -->
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -81,15 +81,6 @@
   .back{ font-size:13.5px; color:var(--ink-300); }
   .back:hover{ color:var(--blue-300); }
   .nav-right{ display:flex; align-items:center; gap:12px; }
-  .theme-toggle{
-    width:40px; height:40px; flex:none; display:flex; align-items:center; justify-content:center;
-    background:transparent; border:1px solid var(--border-soft); border-radius:10px;
-    font-size:16px; line-height:1; transition:border-color .25s var(--ease);
-  }
-  .theme-toggle:hover{ border-color:var(--blue-500); }
-  .theme-toggle .ic-moon{ display:none; }
-  :root[data-theme="light"] .theme-toggle .ic-sun{ display:none; }
-  :root[data-theme="light"] .theme-toggle .ic-moon{ display:block; }
 
   .content{ padding:36px 0 56px; }
   .hero{ text-align:center; padding:8px 0 28px; }
@@ -147,9 +138,7 @@
   <div class="wrap nav">
     <div class="brand"><span class="brand-mark">Б</span><span class="brand-name">Будни_BY</span></div>
     <div class="nav-right">
-      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
-        <span class="ic-sun">☀️</span><span class="ic-moon">🌙</span>
-      </button>
+      <div id="themeMenu" style="width:44px;height:44px"></div>
       <a class="back" href="index.html">← На главную</a>
     </div>
   </div>
@@ -179,6 +168,7 @@
 
 </div>
 
+<script src="theme.js?v=20260921a"></script>
 <script src="app.js?v=20260920a"></script>
 <script>
 function renderRows(obj) {
@@ -219,11 +209,6 @@ async function load() {
 
 load();
 
-document.getElementById('themeToggle').addEventListener('click', function () {
-  var next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', next);
-  try { localStorage.setItem('budni_site_theme', next); } catch (e) {}
-});
 </script>
 </body>
 </html>
