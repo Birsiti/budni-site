@@ -1,0 +1,61 @@
+# изменено 2026-09-30 23:59
+# Ежедневное обновление SEO-страниц /rabota/…: забирает выгрузку живых вакансий (без контактов) из API
+# бэкенда (действие seo_export, нужен секрет BUDNI_ADMIN_TOKEN), пересобирает страницы генератором
+# _tools/gen_seo.py, коммитит изменения и просит GitHub Pages пересобрать сайт.
+# Запуск вручную: вкладка Actions → «SEO pages refresh» → Run workflow.
+name: SEO pages refresh
+
+on:
+  schedule:
+    - cron: '30 3 * * *'   # 03:30 UTC = 06:30 по Минску
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: seo-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Выгрузка вакансий из API
+        env:
+          ADMIN_TOKEN: ${{ secrets.BUDNI_ADMIN_TOKEN }}
+        run: |
+          test -n "$ADMIN_TOKEN" || { echo "Не задан секрет BUDNI_ADMIN_TOKEN (Settings → Secrets and variables → Actions)"; exit 1; }
+          curl -sS --fail --retry 3 --max-time 180 -X POST "https://budni.tg-studio.xyz/exec" \
+            -H "Content-Type: application/json" -H "X-Admin-Token: $ADMIN_TOKEN" \
+            -d '{"action":"seo_export"}' -o resp.json
+          python3 - <<'PY'
+          import json
+          d = json.load(open("resp.json"))
+          assert d.get("ok"), d
+          rows = d["vacancies"]
+          # защита: при сбое API не затираем страницы почти пустой выгрузкой
+          assert len(rows) >= 1000, f"подозрительно мало вакансий: {len(rows)}"
+          json.dump(rows, open("_tools/data.json", "w"), ensure_ascii=False)
+          print("вакансий:", len(rows))
+          PY
+
+      - name: Генерация страниц
+        run: python3 _tools/gen_seo.py _tools/data.json
+
+      - name: Коммит и пуш
+        run: |
+          git config user.name "budni-seo-bot"
+          git config user.email "budni-seo-bot@users.noreply.github.com"
+          git add -A rabota sitemap.xml
+          if git diff --cached --quiet; then echo "изменений нет"; exit 0; fi
+          git commit -m "SEO-страницы: автообновление $(date -u +%F)"
+          git push
+
+      - name: Пересборка GitHub Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "пересборку запросить не вышло — Pages соберётся по пушу"
